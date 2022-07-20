@@ -1,12 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 
 const Header = ({ wallet }) => {
-  const nevigate = useNavigate();
   return (
-    <div className='border-b pt-[54px] pb-[41px] relative z-30'>
-      <div className='max-w-[1580px]  border-[#21406F] flex justify-between xxl:px-[100px]'>
+    <div className='border-b pt-[54px] pb-[41px] relative z-30 border-[#21406F]'>
+      <div className='max-w-[1580px] flex justify-between xxl:px-[100px]'>
         <div className='rounded-full bg-black mx-auto'>
           <img src={logo} alt='logo' width={100} height={100} />
         </div>
