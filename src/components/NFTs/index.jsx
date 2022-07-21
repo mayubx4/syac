@@ -70,11 +70,11 @@ const NFTs = ({ wallet, type }) => {
     let resultArray = [];
     if (e.target.checked) {
       //if checked (true), then add this id into checkedList
-      resultArray = checkedList.filter(CheckedId => CheckedId !== id);
+      resultArray = checkedList.filter(CheckedId => CheckedId !== +id);
       resultArray.push(id);
     } //if not checked (false), then remove this id from checkedList
     else {
-      resultArray = checkedList.filter(CheckedId => CheckedId !== id);
+      resultArray = checkedList.filter(CheckedId => CheckedId !== +id);
     }
     resultArray = resultArray.map(Number);
     console.log(resultArray);
