@@ -75,7 +75,9 @@ const Withdraw = ({ wallet, type }) => {
       <button
         onClick={WithdrawReward}
         className='text-base text-white font-bold rounded-[99px] w-[137px] bg-[#FF0000]
-      py-2 mt-8 hover:bg-opacity-75 flex justify-center'
+      py-2 mt-8 hover:bg-opacity-75 flex justify-center
+      disabled:bg-slate-900 disabled:cursor-not-allowed'
+      disabled={!reward}
       >
         {loader ? <CgSpinner className='animate-spin w-6 h-6 mx-1' /> : ""}
         Withdraw

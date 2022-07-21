@@ -110,7 +110,7 @@ const NFTs = ({ wallet, type }) => {
         .setApprovalForAll(contract, true)
         .send({ from: wallet });
     }
-    
+
     await stakingContract.methods.Stake(checkedList).send({ from: wallet });
     setLoader(true);
     const data = await getNFTs(
@@ -128,11 +128,11 @@ const NFTs = ({ wallet, type }) => {
     setNfts(data.totalNfts);
     setLockedReward(data.lckdReward);
     if (type === "oyac") {
-      const stakingContractSYAC = new web3.eth.Contract(
-        config.stakingAbi ,
-        config.stakingContract
-      );
-      const isGen1Staked = await stakingContractSYAC.methods
+      // const stakingContractSYAC = new web3.eth.Contract(
+      //   config.stakingAbi,
+      //   config.stakingContract
+      // );
+      const isGen1Staked = await stakingContract.methods
         .isStaked(wallet)
         .call();
       if (isStakingFirstTime && reward === 0)
@@ -234,7 +234,7 @@ const NFTs = ({ wallet, type }) => {
     async function getReward() {
       const resp = await axios.get(config.apiUrl + wallet);
       const rewards = resp.data.result.totalRewards;
-      console.log('rewards',rewards);
+      console.log("rewards", rewards);
       if (rewards) setReward(rewards);
     }
     getReward();
@@ -376,7 +376,9 @@ const NFTs = ({ wallet, type }) => {
           <button
             onClick={handleStake}
             className='text-base text-white font-bold rounded-[99px] w-[105px] bg-[#FF9900]
-            py-2 hover:bg-opacity-75 flex justify-center'
+            py-2 hover:bg-opacity-75 flex justify-center 
+            disabled:bg-slate-900 disabled:cursor-not-allowed'
+            disabled={checkedList.length ? false : true}
           >
             {loader ? <CgSpinner className='animate-spin w-6 h-6 mx-1' /> : ""}
             Stake
@@ -385,7 +387,9 @@ const NFTs = ({ wallet, type }) => {
           <button
             onClick={handleUnStake}
             className='text-base text-white font-bold rounded-[99px] w-[105px] bg-[#FF9900]
-            py-2 hover:bg-opacity-75 flex justify-center'
+            py-2 hover:bg-opacity-75 flex justify-center 
+            disabled:bg-slate-900 disabled:cursor-not-allowed'
+            disabled={checkedList.length ? false : true}
           >
             {loader ? <CgSpinner className='animate-spin w-6 h-6 mx-1' /> : ""}
             Unstake
