@@ -4,7 +4,6 @@ import config from "../../config.json";
 import syac from "../../assets/images/logo.png";
 import oyac from "../../assets/images/oyac.png";
 import "./styles.css";
-import { useMoralis } from "react-moralis";
 import { CgSpinner } from "react-icons/cg";
 import NFTImageBox from "../NFTImageBox";
 import axios from "axios";
@@ -23,7 +22,6 @@ const NFTs = ({ wallet, type }) => {
   const [lockedReward, setLockedReward] = useState(0);
   const [reward, setReward] = useState(0);
 
-  const { Moralis, isAuthenticated, authenticate } = useMoralis();
   const web3 = new Web3(window.ethereum);
   const nftContract = new web3.eth.Contract(
     type === "syac" ? config.nftAbi : config.nftAbiOYAC,
@@ -50,13 +48,7 @@ const NFTs = ({ wallet, type }) => {
       .locked_Withdraw_Unstake()
       .send({ from: wallet });
     setLoader(true);
-    const data = await getNFTs(
-      nftContract,
-      stakingContract,
-      wallet,
-      type,
-      Moralis
-    );
+    const data = await getNFTs(nftContract, stakingContract, wallet, type);
     setLoader(false);
     setStakedNfts(data.stakedNfts);
     setUnstakedNfts(data.unStakedNfts);
@@ -113,13 +105,7 @@ const NFTs = ({ wallet, type }) => {
 
     await stakingContract.methods.Stake(checkedList).send({ from: wallet });
     setLoader(true);
-    const data = await getNFTs(
-      nftContract,
-      stakingContract,
-      wallet,
-      type,
-      Moralis
-    );
+    const data = await getNFTs(nftContract, stakingContract, wallet, type);
     setLoader(false);
     setStakedNfts(data.stakedNfts);
     setUnstakedNfts(data.unStakedNfts);
@@ -166,13 +152,7 @@ const NFTs = ({ wallet, type }) => {
     }
     await stakingContract.methods.unstake(checkedList).send({ from: wallet });
     setLoader(true);
-    const data = await getNFTs(
-      nftContract,
-      stakingContract,
-      wallet,
-      type,
-      Moralis
-    );
+    const data = await getNFTs(nftContract, stakingContract, wallet, type);
     setLoader(false);
     setStakedNfts(data.stakedNfts);
     setUnstakedNfts(data.unStakedNfts);
@@ -195,30 +175,9 @@ const NFTs = ({ wallet, type }) => {
   };
 
   useEffect(() => {
-    async function login() {
-      if (!isAuthenticated) {
-        await authenticate({
-          signingMessage: "Sign to Stake SYAC NFT",
-        })
-          .then(function (user) {
-            console.log("logged in user:", user);
-            console.log(user.get("ethAddress"));
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
-    }
-
     async function fetchNFTs() {
       setLoader(true);
-      const data = await getNFTs(
-        nftContract,
-        stakingContract,
-        wallet,
-        type,
-        Moralis
-      );
+      const data = await getNFTs(nftContract, stakingContract, wallet, type);
       setLoader(false);
       setStakedNfts(data.stakedNfts);
       setUnstakedNfts(data.unStakedNfts);
@@ -229,7 +188,7 @@ const NFTs = ({ wallet, type }) => {
       handleSelectOption(1, data.unStakedNfts);
     }
 
-    login().then(() => fetchNFTs());
+    fetchNFTs();
 
     async function getReward() {
       const resp = await axios.get(config.apiUrl + wallet);

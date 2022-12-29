@@ -5,10 +5,8 @@ import { CgSpinner } from "react-icons/cg";
 import axios from "axios";
 import getSignature from "../../util/signature";
 import { getNFTs } from "../../util/utilities";
-import { useMoralis } from "react-moralis";
 
 const Withdraw = ({ wallet, type }) => {
-  const { Moralis } = useMoralis();
   const [reward, setReward] = useState("");
   const [loader, setLoader] = useState(false);
   const web3 = new Web3(window.ethereum);
@@ -35,6 +33,7 @@ const Withdraw = ({ wallet, type }) => {
   useEffect(() => {
     async function fetchReward() {
       const rewards = await getReward();
+      console.log(rewards, "ssssssssssssss");
       setReward(rewards);
     }
     fetchReward();
@@ -50,13 +49,7 @@ const Withdraw = ({ wallet, type }) => {
       await stakingContract.methods
         .WithdrawReward(web3.utils.toWei(reward), +data.nonce, data.signature)
         .send({ from: wallet });
-      const data1 = await getNFTs(
-        nftContract,
-        stakingContract,
-        wallet,
-        type,
-        Moralis
-      );
+      const data1 = await getNFTs(nftContract, stakingContract, wallet, type);
       if (data1.stakedNfts.length === 0)
         await axios.delete(config.apiUrl + wallet);
       else {
@@ -77,7 +70,7 @@ const Withdraw = ({ wallet, type }) => {
         className='text-base text-white font-bold rounded-[99px] w-[137px] bg-[#FF0000]
       py-2 mt-8 hover:bg-opacity-75 flex justify-center
       disabled:bg-slate-900 disabled:cursor-not-allowed'
-      disabled={!reward}
+        disabled={reward == 0}
       >
         {loader ? <CgSpinner className='animate-spin w-6 h-6 mx-1' /> : ""}
         Withdraw

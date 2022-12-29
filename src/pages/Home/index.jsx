@@ -2,8 +2,7 @@ import React from "react";
 import logo from "../../assets/images/logo.png";
 import ConnectBtn from "../../components/ConnectBtn/ConnectBtn";
 
-const Home = ({setWallet}) => {
-
+const Home = ({ setWallet,setIsMsgVerified }) => {
   return (
     <div
       className="bg-[url('assets/images/Background.webp')] bg-no-repeat bg-center bg-cover
@@ -20,7 +19,7 @@ const Home = ({setWallet}) => {
         <h1 className='text-white text-[44px] text-center font-bold  '>
           Please select a wallet to connect
         </h1>
-        <ConnectBtn redirect={true} setWallet={setWallet}/>
+        <ConnectBtn redirect={true} setWallet={setWallet} setIsMsgVerified={setIsMsgVerified}/>
       </div>
     </div>
   );
